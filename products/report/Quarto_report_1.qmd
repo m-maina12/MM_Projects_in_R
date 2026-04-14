@@ -1,0 +1,110 @@
+---
+title: "Data visualization of insurance data"
+date: "`r date()`"
+author: m-maina12
+format: 
+  html:
+    toc: true
+    code-fold: show
+    code-tools: true
+    df-print: paged
+---
+
+# Load useful libraries
+
+[named hyperlinks](https://quarto.org/)
+
+```{r, warning = FALSE, message = FALSE}
+library(cowplot)
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(tidyverse)
+library(unibeCols)
+```
+
+
+# Load insurance data
+
+```{r, warning=FALSE}
+setwd("/Users/mm25l304/Desktop/PHS/Module2/ProjectsR/MM_Projects_in_R")
+insurance.raw <- read_csv("data/raw/insurance_with_date.csv",
+                          show_col_types = F)
+```
+
+# Plots
+
+## Density plot/histogram 
+
+```{r, message = FALSE}
+p1.1 <- ggplot(data = insurance.raw, aes(x = bmi, col = sex,
+                                     fill = sex)) +
+  geom_density(alpha = 0.4) +
+  labs(x = expression(paste( "BMI (kg/", m^2,")"))) +
+  scale_color_manual(breaks = c("female", "male"),
+                     name = "",
+                     values = c(unibeRedS()[1], unibeIceS()[1]),
+                     labels = c("Female", "Male")) +
+  scale_fill_manual(breaks = c("female", "male"),
+                     name = "",
+                     values = c(unibeRedS()[1], unibeIceS()[1]),
+                    labels = c("Female", "Male")) +
+  theme(legend.position = "bottom")
+
+p1.2 <- ggplot(data = insurance.raw, aes(x = charges, col = sex,
+                                     fill = sex)) +
+  geom_histogram(alpha = 0.4, position = "stack", 
+                 aes(y = after_stat(density))) +
+  geom_density(alpha = 0) +
+  labs(x = "Charges in Dollars") +
+  geom_vline(aes(xintercept = median(charges)), col = unibePastelS()[1],
+             linewidth = 1) +
+  scale_color_manual(breaks = c("female", "male"),
+                     name = "",
+                     values = c(unibeRedS()[1], unibeIceS()[1]),
+                     labels = c("Female", "Male")) +
+  scale_fill_manual(breaks = c("female", "male"),
+                    name = "",
+                    values = c(unibeRedS()[1], unibeIceS()[1]),
+                    labels = c("Female", "Male")) +
+  theme(legend.position = "top")
+
+plot_grid(plotlist = list(p1.1, p1.2),
+                     align = "h",
+                     labels = c("A", "B"))
+```
+
+## Quantiles
+
+```{r}
+p2 <- ggplot(data = insurance.raw, aes(x = age, y = bmi,
+                                         col = smoker)) +
+  geom_point() +
+  scale_color_manual(breaks = c("yes", "no"),
+                     values = c(unibeRedS()[1], unibeOceanS()[1]),
+                     name = "") + 
+  labs(x = "Age (years)",
+       y = expression(paste("BMI (kg/)", m^2, ")"))) +
+  theme(legend.position = "top"); p2
+```
+
+## Violin / boxplots
+
+```{r}
+p3.1 <- ggplot(data = insurance.raw, aes(x = smoker, y = charges)) +
+  geom_violin() +
+  labs(y = "Charges ($)")
+
+p3.2 <- ggplot(data = insurance.raw, aes(x = charges, y = smoker)) +
+  geom_boxplot() +
+  labs(x = "Charges ($)")
+
+plot_grid(plotlist = list(p3.1, p3.2),
+                     align = "h",
+                     labels = c("A", "B"))
+```
+
+
+
+
+
