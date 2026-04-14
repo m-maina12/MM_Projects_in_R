@@ -1,4 +1,5 @@
 rm(list = ls())
+
 ebola_raw <- read.csv("data/raw/ebola.csv")
 
 countries_to_keep <- c("Guinea", "Sierra Leone", "Liberia")

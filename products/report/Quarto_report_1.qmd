@@ -12,8 +12,6 @@ format:
 
 # Load useful libraries
 
-[named hyperlinks](https://quarto.org/)
-
 ```{r, warning = FALSE, message = FALSE}
 library(cowplot)
 library(dplyr)
