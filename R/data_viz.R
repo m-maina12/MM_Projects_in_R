@@ -99,4 +99,46 @@ ggplot(ebola, aes(x = Date, y = Cum_conf_cases,
   scale_x_date(date_breaks = "2 months", date_labels = "%b %y") +
   theme(legend.position = "bottom")
 
+# insurance dataset
+insurance_data_TD <- readr::read_csv("data/raw/insurance_with_date.csv",
+                              show_col_types = F)
+
+# First plot
+library(ggplot2)
+library(unibeCols)
+
+ggplot(data = insurance_data_TD, aes(x = bmi, col = sex,
+                                     fill = sex)) +
+  geom_density(alpha = 0.4) +
+  labs(x = expression(paste( "BMI (kg/", m^2,")"))) +
+  scale_color_manual(breaks = c("female", "male"),
+                     name = "",
+                     values = c(unibeRedS()[1], unibeIceS()[1]),
+                     labels = c("Female", "Male")) +
+  scale_fill_manual(breaks = c("female", "male"),
+                     name = "",
+                     values = c(unibeRedS()[1], unibeIceS()[1]),
+                    labels = c("Female", "Male"))
+
+ggplot(data = insurance_data_TD, aes(x = charges, col = sex,
+                                     fill = sex)) +
+  geom_histogram(alpha = 0.4, position = "stack", 
+                 aes(y = after_stat(density))) +
+  geom_density(alpha = 0) +
+  labs(x = "Charges in Dollars") +
+  geom_vline(aes(xintercept = median(charges)), col = unibePastelS()[1],
+             linewidth = 1) +
+  scale_color_manual(breaks = c("female", "male"),
+                     name = "",
+                     values = c(unibeRedS()[1], unibeIceS()[1]),
+                     labels = c("Female", "Male")) +
+  scale_fill_manual(breaks = c("female", "male"),
+                    name = "",
+                    values = c(unibeRedS()[1], unibeIceS()[1]),
+                    labels = c("Female", "Male")) +
+  theme(legend.position = "top")
+
+
+
+
 
